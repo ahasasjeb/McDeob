@@ -4,6 +4,7 @@ import com.shanebeestudios.mcdeob.app.App;
 import com.shanebeestudios.mcdeob.util.AppLogger;
 import com.shanebeestudios.mcdeob.util.Logger;
 import com.shanebeestudios.mcdeob.util.TimeSpan;
+import com.shanebeestudios.mcdeob.util.I18n;
 import com.shanebeestudios.mcdeob.util.Util;
 import com.shanebeestudios.mcdeob.version.Version;
 import net.md_5.specialsource.Jar;
@@ -95,7 +96,7 @@ public class Processor {
 
         // If the version is invalid, fail
         if (!this.version.prepareVersion()) {
-            fail("Invalid version: " + versionName);
+            fail(I18n.tr("error.invalidVersion", versionName));
             return;
         }
 
@@ -109,25 +110,25 @@ public class Processor {
 
         // Attempt to download jar
         if (!downloadJar()) {
-            fail("Failed to retrieve jar.");
+            fail(I18n.tr("error.downloadJar"));
             return;
         }
 
         // Attempt to download mappings
         if (!downloadMappings()) {
-            fail("Failed to download mappings.");
+            fail(I18n.tr("error.downloadMappings"));
             return;
         }
 
         // Attempt to remap jar
         if (!remapJar()) {
-            fail("Failed to remap jar.");
+            fail(I18n.tr("error.remapJar"));
             return;
         }
 
         // Attempt to decompile
         if (this.decompile && !decompileJar()) {
-            fail("Failed to decompile JAR.");
+            fail(I18n.tr("error.decompileJar"));
             return;
         }
         cleanup();
@@ -152,8 +153,8 @@ public class Processor {
             TimeSpan timeSpan = TimeSpan.start();
             Logger.info("Downloading JAR file from Mojang.");
             this.appOption.ifPresent(a -> {
-                a.updateStatusBox("Downloading JAR...");
-                a.updateButton("Downloading JAR...", Color.BLUE);
+                a.updateStatusBox(I18n.tr("status.downloading.jar"));
+                a.updateButton(I18n.tr("status.downloading.jar"), Color.BLUE);
             });
             this.jarPath = this.dataFolderPath.resolve(this.minecraftJarName);
 
@@ -198,8 +199,8 @@ public class Processor {
         TimeSpan timeSpan = TimeSpan.start();
         Logger.info("Downloading mappings file from Mojang...");
         this.appOption.ifPresent(app -> {
-            app.updateStatusBox("Downloading mappings...");
-            app.updateButton("Downloading mappings...", Color.BLUE);
+            app.updateStatusBox(I18n.tr("status.downloading.mappings"));
+            app.updateButton(I18n.tr("status.downloading.mappings"), Color.BLUE);
         });
 
         final HttpURLConnection connection;
@@ -237,8 +238,8 @@ public class Processor {
     public boolean remapJar() {
         TimeSpan timeSpan = TimeSpan.start();
         this.appOption.ifPresent(app -> {
-            app.updateStatusBox("Remapping...");
-            app.updateButton("Remapping...", Color.BLUE);
+            app.updateStatusBox(I18n.tr("status.remapping"));
+            app.updateButton(I18n.tr("status.remapping"), Color.BLUE);
         });
         this.remappedJar = this.dataFolderPath.resolve(this.mappedJarName);
 
@@ -284,8 +285,8 @@ public class Processor {
         TimeSpan timeSpan = TimeSpan.start();
         Logger.info("Decompiling final JAR file.");
         this.appOption.ifPresent(app -> {
-            app.updateStatusBox("Decompiler starting...");
-            app.updateButton("Decompiling...", Color.BLUE);
+            app.updateStatusBox(I18n.tr("status.decompiler.starting"));
+            app.updateButton(I18n.tr("status.decompiling"), Color.BLUE);
         });
         final Path decompileDir;
         try {

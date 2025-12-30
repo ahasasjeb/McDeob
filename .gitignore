@@ -5,3 +5,9 @@
 
 deobf-work/*
 target/*
+.gradle
+/.gradle
+.gradle/
+build
+build/
+/build

@@ -6,7 +6,8 @@ plugins {
 
 // Version of McDeob
 val projectVersion = "3.3.0"
-java.sourceCompatibility = JavaVersion.VERSION_21
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenLocal()
@@ -32,7 +33,7 @@ dependencies {
 
 tasks {
     compileJava {
-        options.release = 21
+        options.release = 17
         options.compilerArgs.add("-Xlint:unchecked")
         options.compilerArgs.add("-Xlint:deprecation")
     }

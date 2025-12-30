@@ -3,6 +3,7 @@ package com.shanebeestudios.mcdeob.app;
 import com.shanebeestudios.mcdeob.Processor;
 import com.shanebeestudios.mcdeob.app.listener.SnapshotButtonListener;
 import com.shanebeestudios.mcdeob.app.listener.StartButtonListener;
+import com.shanebeestudios.mcdeob.util.I18n;
 import com.shanebeestudios.mcdeob.util.TimeSpan;
 import com.shanebeestudios.mcdeob.util.Util;
 import com.shanebeestudios.mcdeob.version.Version;
@@ -32,7 +33,7 @@ public class App extends JFrame {
 
         // Initialize versions
         if (!Versions.initVersions()) {
-            updateInfoLine("Failed to load versions. Are you connected to the internet?", Util.TITLE_FAIL_COLOR);
+            updateInfoLine(I18n.tr("error.loadVersions"), Util.TITLE_FAIL_COLOR);
             return;
         }
 
@@ -63,7 +64,7 @@ public class App extends JFrame {
     private void setupWindow() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(500, 335);
-        setTitle("McDeob");
+        setTitle(I18n.tr("app.title"));
 
         try { // Window title hack for GTK
             Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
@@ -85,7 +86,7 @@ public class App extends JFrame {
     }
 
     private void createInfoLine() {
-        this.infoLineLabel = new JLabel("Initializing versions, please wait...", SwingConstants.CENTER);
+        this.infoLineLabel = new JLabel(I18n.tr("app.info.initializing"), SwingConstants.CENTER);
         this.infoLineLabel.setForeground(Util.TITLE_LOADING_COLOR);
         this.infoLineLabel.setHorizontalTextPosition(SwingConstants.CENTER);
         hookSize(() -> this.infoLineLabel.setBounds(0, 10, getSize().width, 50));
@@ -98,9 +99,9 @@ public class App extends JFrame {
     }
 
     private void createTypeButton() {
-        this.serverRadioButton = new JRadioButton("Server");
-        this.clientRadioButton = new JRadioButton("Client");
-        this.snapshotToggleButton = new JToggleButton("Toggle Snapshots");
+        this.serverRadioButton = new JRadioButton(I18n.tr("app.type.server"));
+        this.clientRadioButton = new JRadioButton(I18n.tr("app.type.client"));
+        this.snapshotToggleButton = new JToggleButton(I18n.tr("app.toggle.snapshots"));
         this.snapshotToggleButton.setSelected(false);
         this.snapshotToggleButton.addActionListener(new SnapshotButtonListener(this));
 
@@ -131,14 +132,14 @@ public class App extends JFrame {
     }
 
     private void createDecompileButton() {
-        this.decompileCheckbox = new JCheckBox("Decompile?");
+        this.decompileCheckbox = new JCheckBox(I18n.tr("app.decompile"));
         hookSize(() -> this.decompileCheckbox.setBounds((getSize().width / 2) - 60, 165, 120, 30));
         this.decompileCheckbox.setSelected(false);
         add(this.decompileCheckbox);
     }
 
     private void createStatusBox() {
-        this.statusBox = new JTextField("Status!");
+        this.statusBox = new JTextField(I18n.tr("app.status.default"));
         this.statusBox.setEditable(false);
         hookSize(() -> {
             int width = (int) (getSize().width * 0.90);
@@ -152,8 +153,8 @@ public class App extends JFrame {
     }
 
     private void createStartButton() {
-        this.startButton = new JButton("Start!");
-        this.startButton.setToolTipText("test");
+        this.startButton = new JButton(I18n.tr("app.start.label"));
+        this.startButton.setToolTipText(I18n.tr("app.start.tooltip"));
         int w = 200;
         int h = 50;
         int hDivided;
@@ -186,6 +187,10 @@ public class App extends JFrame {
         this.snapshotToggleButton.setEnabled(!this.snapshotToggleButton.isEnabled());
     }
 
+    public boolean isReadyToStart() {
+        return this.startButton.isEnabled() && this.startButton.getText().equals(I18n.tr("app.start.label"));
+    }
+
     public void start(Version version, boolean shouldDecompile) {
         Thread thread = new Thread("Processor") {
             @Override
@@ -202,7 +207,7 @@ public class App extends JFrame {
         updateButton(failMessage, Color.RED);
         getToolkit().beep();
         Timer timer = new Timer(1000, e1 -> {
-            updateButton("Start!");
+            updateButton(I18n.tr("app.start.label"));
             toggleControls();
         });
         timer.setRepeats(false);
@@ -210,11 +215,11 @@ public class App extends JFrame {
     }
 
     public void finish(TimeSpan timeSpan) {
-        this.updateStatusBox(String.format("Completed in %s!", timeSpan));
-        updateButton("Completed!");
+        this.updateStatusBox(I18n.tr("app.status.completed", timeSpan));
+        updateButton(I18n.tr("app.start.completed"));
         getToolkit().beep();
         Timer timer = new Timer(1000, e1 -> {
-            updateButton("Start!");
+            updateButton(I18n.tr("app.start.label"));
             toggleControls();
         });
         timer.setRepeats(false);
@@ -223,7 +228,7 @@ public class App extends JFrame {
 
     private void finishSetup() {
         setupVersions(false);
-        updateInfoLine("Let's start de-obfuscating some Minecraft", Util.TITLE_READY_COLOR);
+        updateInfoLine(I18n.tr("app.info.ready"), Util.TITLE_READY_COLOR);
         toggleControls();
     }
 

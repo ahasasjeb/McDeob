@@ -1,6 +1,7 @@
 package com.shanebeestudios.mcdeob.app.listener;
 
 import com.shanebeestudios.mcdeob.app.App;
+import com.shanebeestudios.mcdeob.util.I18n;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,11 +20,11 @@ public class SnapshotButtonListener implements ActionListener {
         JToggleButton snapshotToggleButton = this.app.getSnapshotToggleButton();
         if (snapshotToggleButton.isSelected()) {
             snapshotToggleButton.setSelected(true);
-            snapshotToggleButton.setText("Toggle Releases");
+            snapshotToggleButton.setText(I18n.tr("app.toggle.releases"));
             this.app.setupVersions(true);
         } else {
             snapshotToggleButton.setSelected(false);
-            snapshotToggleButton.setText("Toggle Snapshots");
+            snapshotToggleButton.setText(I18n.tr("app.toggle.snapshots"));
             this.app.setupVersions(false);
         }
     }
